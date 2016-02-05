@@ -1,0 +1,84 @@
+(c) CERN 2016
+05.02.2016 Maciej Suminski
+
+Brief description of main classes:
+
+Manager
+=======
+In principle, Manager handles all the simulation stages:
+
+* Initalization
+Create appropriate simulator instances (either GHDL or Icarus) basing on the
+list of files to be simulated. Each instance is responsible for a single file,
+even if there are multiple modules inside.
+
+* Elaboration
+Each simulator should elaborate designs to prepare a list of provided modules.
+
+It is likely that after the initial elaboration, there will be modules that are
+seen as blackboxes (i.e. unknown modules that should be handled by another
+instance). In such case the simulator that needs a blackbox instance sends a
+request to the Manager to create an instance of the missing module and connect
+certain nets to it.
+
+If the requested contains other blackbox submodules, the submodules have to
+be instantiated as well.
+
+Basing on the instantiation requests, the Manager should be able to create a
+tree structure of the design and easily find its top module (the root node).
+
+* Simulation
+Manager polls the simulator instances to decide which one should be run. The
+criterion is the event occuring the earliest in the queue.
+
+After an instance has finished execution, it may have changed values for some
+nets, triggering events in other simulator instances. Obviously, if this
+happens, the new events are the first to be executed before the simulation time
+advances.
+
+Because VHDL and (System)Verilog deal differently with event execution order,
+a simulator instance is able to tell the Manager that it gives way for others
+to react to the introduced changes. Such solution should be a good compromise
+that allows two different event schedulers coexist.
+
+You may want to read a discussion on the differences between VHDL and SV
+event execution order [1].
+
+Alternatively, simulators may report changes in the event queue, so the Manager
+does not have to poll them every time it has to decide which Simulator should
+be executed.
+
+Simulator
+=========
+This is the interface to be implemented in GHDL and Icarus. Together with
+ManagerInterface class assures interaction between the Manager and a simulator
+instance.
+
+Net
+===
+Class that represents a connection between modules. Once its value changes,
+all connected ModuleInstances are notified, so respective Simulators should
+add an update event and react to the change.
+
+Nets should be named in a way that represents the internal structure e.g.
+cpu_core.alu.output.
+
+TODO name aliases? what to do in case of a net coming through a few different
+submodules?
+
+Port
+====
+Port describes a part of a module interface to exchange data. It exists to
+provide unambiguous connection between modules and nets.
+
+ModuleInterface
+===============
+ModuleInterface role is to group ports together and associate them with a name,
+and as such is a module signature.
+
+ModuleInstance
+==============
+ModuleInstance represents an instance of a module handled by a Simulator. It
+also keeps information about net connections.
+
+1. http://electronics.stackexchange.com/questions/99223/relation-between-delta-cycle-and-event-scheduling-in-verilog-simulation
