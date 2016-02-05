@@ -82,3 +82,19 @@ ModuleInstance represents an instance of a module handled by a Simulator. It
 also keeps information about net connections.
 
 1. http://electronics.stackexchange.com/questions/99223/relation-between-delta-cycle-and-event-scheduling-in-verilog-simulation
+
+Brief discussion on rejected solution
+
+Language converter
+==================
+The idea would be to convert verilog to vhdl or vhdl to verilog, like vhdlpp.  This approach would work but until a certain point.
+The reason is that the semantic of verilog is very different from the semantic of vhdl.
+
+For example, let's consider VHDL signals. They are different from verilog nets:
+- a verilog net is continuously assigned, while a vhdl signal save the value of each driver
+- there is no corresponding constructs in verilog for net to express signal waveform (x1 after t1, x2 after t2...)
+
+Likewise, VHDL signals are different from verilog registers:
+- there is no resolution for a verilog register: the last assignment wins (like a vhdl variable)
+- there is no concept of driver for register
+
