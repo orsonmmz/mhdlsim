@@ -126,21 +126,4 @@ protected:
     // breakpoints
 };
 
-// I hope it is not too Javaish;)
-class SimulatorFactory() {
-public:
-    /**
-     * @brief Creates an instance that will be responsible for a specific file.
-     * The type of simulator is based on the extension.
-     * @param filename is the input file name for the new instance.
-     */
-    static Simulator* create(const std::string& filename);
-
-    // TODO another method that enforces a specific simulator instead of basing
-    // on the file extension?
-
-private:
-    SimulatorFactory();
-};
-
 #endif /* SIMULATOR_H */
