@@ -39,8 +39,9 @@ public:
     /**
      * @brief Adds a new simulator instance to be managed.
      * @param sim is the instance to be added.
+     * @param type is instance type.
      */
-    int add_instance(Simulator* sim);
+    int add_instance(Simulator::sim_type type, Simulator* sim);
 
     /**
      * @brief Starts the simulation.
@@ -51,7 +52,7 @@ public:
 
 private:
     ///> Instances of simulators to manage.
-    std::deque<Simulator*> instances_;
+    std::map<Simulator::sim_type, Simulator*> instances_;
 
     ///> Keep list of modules that have to be notified
     ///> when a particular signal changes.

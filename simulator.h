@@ -34,6 +34,8 @@ typedef sim_time_t unsigned long long;
  */
 class Simulator {
 public:
+    enum sim_type { Verilog, VHDL };
+
     Simulator(const std::string& file);
     virtual ~Simulator();
 
