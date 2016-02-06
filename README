@@ -50,9 +50,7 @@ be executed.
 
 Simulator
 =========
-This is the interface to be implemented in GHDL and Icarus. Together with
-ManagerInterface class assures interaction between the Manager and a simulator
-instance.
+This is the interface to be implemented in GHDL and Icarus.
 
 Net
 ===

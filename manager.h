@@ -31,7 +31,7 @@ class ModuleInstance;
  * @brief Class responsible for mixed-language elaboration and simulation.
  * Creates simulator instances as needed and coordinates them.
  */
-class Manager : public ManagerInterface {
+class Manager {
 public:
     Manager();
     virtual ~Manager();

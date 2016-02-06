@@ -23,8 +23,6 @@
 
 #include "module.h"
 
-class ManagerInterface;
-
 ///> Universal simulation time unit.
 typedef sim_time_t unsigned long long;
 
@@ -110,9 +108,6 @@ protected:
     ///> Instances of modules handled by this simulator instance. The string key
     ///> is the name of an instance, not the name of the module.
     std::map<const std::string, ModuleInstance>;
-
-    ///> Interface to interact with the Manager.
-    ManagerInterface* manager_;
 
     // TODO maybe one day an interface to call subprograms? surely not for
     // the first release
