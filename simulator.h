@@ -89,6 +89,12 @@ public:
     virtual sim_time_t current_time() const;
 
     /**
+     * @brief Add file(s).
+     */
+    virtual void add_files(std::set<std::string&>&);
+    virtual void add_file(const std::string&) = 0;
+
+    /**
      * @brief Advances the simulation by time. All events in the queue will be
      * executed.
      * @param time is the amount of time for advancement.
