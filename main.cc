@@ -10,7 +10,7 @@ int main(int argc, char*argv[])
         create a simulator instance that works with associated file
      }
 
-     simulator.run();
+     manager.run();
      */
 
     return 0;

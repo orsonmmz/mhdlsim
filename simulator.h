@@ -36,7 +36,7 @@ class Simulator {
 public:
     enum sim_type { Verilog, VHDL };
 
-    Simulator(const std::string& file);
+    Simulator()
     virtual ~Simulator();
 
     /**
@@ -58,18 +58,12 @@ public:
     virtual int elaborate();    // TODO merge in initialize?
 
     /**
-     * @brief Returns the associated file name.
-     * @return The name of simulated file.
-     */
-    const std::string& filename() const { return filename_; }
-
-    /**
      * @brief Creates an instance with a given name.
      * This function is to be called by the Manager. It will also assign nets
      * to ports.
      */
     // TODO generic/parameters?
-    ModuleInstance& instantiate(const ModuleInterface&iface);
+    ModuleInstance& instantiate(const ModuleInterface& iface);
 
     /**
      * @brief Notifies the simulator that a net value has changed.
@@ -102,9 +96,6 @@ public:
     virtual int advance_time(sim_time_t time);
 
 protected:
-    ///> Simulated file name.
-    const std::string filename_;
-
     ///> Modules provided by this simulator instance. They can be instantiated
     ///> as required. The string key is the name of the module, as defined
     ///> in its interface.
