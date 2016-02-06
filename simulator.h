@@ -43,19 +43,19 @@ public:
      * @brief Initializes the simulator.
      * @return 0 in case of success.
      */
-    virtual int initialize();
+    virtual int initialize() = 0;
 
     /**
-     * @brief Parses the input file.
+     * @brief Analyzes the input files.
      * @return 0 in case of success.
      */
-    virtual int parse();    // TODO merge in initialize?
+    virtual int analyze() = 0;
 
     /**
-     * @brief Performs elaboration of the input file.
+     * @brief Performs elaboration of the required entity/arch.
      * @return 0 in case of success.
      */
-    virtual int elaborate();    // TODO merge in initialize?
+    virtual int elaborate(const std::string&, const std::string&) = 0;
 
     /**
      * @brief Creates an instance with a given name.
@@ -75,7 +75,7 @@ public:
      * @brief Executes the next event from the event queue.
      * @return 0 in case of success.
      */
-    virtual int step_event();
+    virtual int step_event() = 0;
 
     /**
      * @brief Returns the timestamp of the next event in the event queue.
@@ -93,7 +93,7 @@ public:
      * executed.
      * @param time is the amount of time for advancement.
      */
-    virtual int advance_time(sim_time_t time);
+    virtual int advance_time(sim_time_t time) = 0;
 
 protected:
     ///> Modules provided by this simulator instance. They can be instantiated
