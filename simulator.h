@@ -51,9 +51,18 @@ public:
 
     /**
      * @brief Performs elaboration of the required entity/arch.
+     * @param ent entity name.
+     * @param arch architecture name.
+     * @return unknown modules/architectures discovered during elaboration.
+     */
+    virtual ModuleInstance* elaborate(const std::string& ent, const std::string& arch) = 0;
+
+    /**
+     * @brief Complete the elaboration.
+     * @param modules modules/architectures needed to complete the elaboration.
      * @return 0 in case of success.
      */
-    virtual int elaborate(const std::string&, const std::string&) = 0;
+    virtual int elaborate(ModuleInstance* modules) = 0;
 
     /**
      * @brief Creates an instance with a given name.
