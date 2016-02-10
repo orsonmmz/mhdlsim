@@ -38,6 +38,7 @@ private:
     const std::string name_;
     const int width_;
     const direction_t dir_;
+
 };
 
 class ModuleInterface {
@@ -59,11 +60,23 @@ private:
 
     ///> Interconnecting ports.
     const std::deque<const Port> ports_;
+
+};
+
+class ModuleSpec : public ModuleInterface {
+public:
+    ModuleSpec(const ModuleInterface& iface);
+    ~ModuleSpec();
+
+    // TODO get_generic/param
+    // TODO set_generic/param
+
+private:
 };
 
 class ModuleInstance {
 public:
-    ModuleInstance(const std::string& name, const ModuleInterface& iface, Simulator&parent);
+    ModuleInstance(const std::string& name, const ModuleSpec& iface, Simulator&parent);
     ~ModuleInstance();
 
     const std::string& name() const { return name_; }
@@ -80,14 +93,13 @@ public:
     //connect(int idx, Net& net);
 
     // TODO get_generic/param
-    // TODO set_generic/param
 
 private:
     ///> Name of the instance.
     const std::string name_;
 
     ///> Associated component/module interface.
-    const ModuleInterface& iface_;
+    const ModuleSpec& iface_;
 
     // TODO this could be also map<int, Net>
     // TODO if we keep such map, then we have to define comparison functions
@@ -98,6 +110,7 @@ private:
 
     ///> Simulator that handles the instance.
     Simulator& parent_;
+
 };
 
 #endif /* MODULE_H */

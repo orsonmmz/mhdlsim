@@ -12,24 +12,23 @@ public:
      * @brief Performs elaboration of the required entity/arch.
      * @param ent entity name.
      * @param arch architecture name.
-     * @return unknown modules/architectures discovered during elaboration.
+     * @return unknown module/architecture discovered during elaboration.
      */
-    virtual ModuleInstance* elaborate(const std::string& ent, const std::string& arch) = 0;
+    virtual ModuleSpec& elaborate(const std::string& ent, const std::string& arch) = 0;
 
     /**
      * @brief Complete the elaboration.
-     * @param modules modules/architectures needed to complete the elaboration.
-     * @return 0 in case of success.
+     * @param module module/architecture needed to continue the elaboration.
+     * @return unknown module/architecture discovered during elaboration.
      */
-    virtual int elaborate(ModuleInstance* modules) = 0;
+    virtual ModuleSpec& elaborate(ModuleInstances& module) = 0;
 
     /**
      * @brief Creates an instance with a given name.
      * This function is to be called by the Manager. It will also assign nets
      * to ports.
      */
-    // TODO generic/parameters?
-    ModuleInstance& instantiate(const ModuleInterface& iface);
+    ModuleInstance& instantiate(const ModuleSpec& iface);
 
 protected:
     ///> Modules provided by this simulator instance. They can be instantiated
