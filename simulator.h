@@ -21,20 +21,12 @@
 #ifndef SIMULATOR_H
 #define SIMULATOR_H
 
-#include "module.h"
-
 ///> Universal simulation time unit.
 typedef sim_time_t unsigned long long;
 
-/**
- * @brief Class that represents a single simulator instance. Icarus and GHDL
- * have to provide such interface.
- */
 class Simulator {
 public:
-    enum sim_type { Verilog, VHDL };
-
-    Simulator()
+    Simulator();
     virtual ~Simulator();
 
     /**
@@ -42,35 +34,6 @@ public:
      * @return 0 in case of success.
      */
     virtual int initialize() = 0;
-
-    /**
-     * @brief Analyzes the input files.
-     * @return 0 in case of success.
-     */
-    virtual int analyze() = 0;
-
-    /**
-     * @brief Performs elaboration of the required entity/arch.
-     * @param ent entity name.
-     * @param arch architecture name.
-     * @return unknown modules/architectures discovered during elaboration.
-     */
-    virtual ModuleInstance* elaborate(const std::string& ent, const std::string& arch) = 0;
-
-    /**
-     * @brief Complete the elaboration.
-     * @param modules modules/architectures needed to complete the elaboration.
-     * @return 0 in case of success.
-     */
-    virtual int elaborate(ModuleInstance* modules) = 0;
-
-    /**
-     * @brief Creates an instance with a given name.
-     * This function is to be called by the Manager. It will also assign nets
-     * to ports.
-     */
-    // TODO generic/parameters?
-    ModuleInstance& instantiate(const ModuleInterface& iface);
 
     /**
      * @brief Notifies the simulator that a net value has changed.
@@ -96,12 +59,6 @@ public:
     virtual sim_time_t current_time() const;
 
     /**
-     * @brief Add file(s).
-     */
-    virtual void add_files(std::set<std::string&>&);
-    virtual void add_file(const std::string&) = 0;
-
-    /**
      * @brief Advances the simulation by time. All events in the queue will be
      * executed.
      * @param time is the amount of time for advancement.
@@ -109,15 +66,6 @@ public:
     virtual int advance_time(sim_time_t time) = 0;
 
 protected:
-    ///> Modules provided by this simulator instance. They can be instantiated
-    ///> as required. The string key is the name of the module, as defined
-    ///> in its interface.
-    std::map<const std::string, ModuleInterface>;
-
-    ///> Instances of modules handled by this simulator instance. The string key
-    ///> is the name of an instance, not the name of the module.
-    std::map<const std::string, ModuleInstance>;
-
     // TODO maybe one day an interface to call subprograms? surely not for
     // the first release
 
