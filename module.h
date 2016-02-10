@@ -76,7 +76,7 @@ private:
 
 class ModuleInstance {
 public:
-    ModuleInstance(const std::string& name, const ModuleSpec& iface, Simulator&parent);
+    ModuleInstance(const std::string& name, const ModuleSpec& iface);
     ~ModuleInstance();
 
     const std::string& name() const { return name_; }
@@ -107,9 +107,6 @@ private:
     std::map<const Port, Net*> connections_;
 
     // TODO const std::map<???> generics_; // aka parameters
-
-    ///> Simulator that handles the instance.
-    Simulator& parent_;
 
 };
 
