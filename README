@@ -1,5 +1,5 @@
 (c) CERN 2016
-05.02.2016 Maciej Suminski
+05.02.2016 Maciej Suminski / Tristan Gingold
 
 Brief description of main classes:
 
@@ -8,14 +8,19 @@ Manager
 In principle, Manager handles all the simulation stages:
 
 * Initalization
-Create appropriate simulator instances (either GHDL or Icarus) basing on the
-list of files to be simulated. Each instance is responsible for a single file,
-even if there are multiple modules inside.
+Create appropriate simulator instances, one per language. Each instance may
+interpret some options from the command line.
+
+* Command line
+The command line is a list of verilog files and optionally a vhdl unit name
+If the latter is not present, the elaboration will start from
+verilog; if the latter is present the elaboration will start from the vhdl
+unit.
 
 * Elaboration
-Each simulator should elaborate designs to prepare a list of provided modules.
+The first simulator starts to elaborate the design. 
 
-It is likely that after the initial elaboration, there will be modules that are
+It is likely that during the elaboration, there will be modules that are
 seen as blackboxes (i.e. unknown modules that should be handled by another
 instance). In such case the simulator that needs a blackbox instance sends a
 request to the Manager to create an instance of the missing module and connect
