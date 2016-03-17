@@ -1,5 +1,5 @@
-#ifndef ANALYZER_H
-#define ANALYZER_H
+#ifndef HANDLER_H
+#define HANDLER_H
 
 /*
  * Copyright (c) 2016 CERN
@@ -19,19 +19,24 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "handler.h"
+#include <vector>
+#include <string>
 
-class Analyzer : public virtual FileParamHandler {
-public:
-    Analyzer() {};
-    virtual ~Analyzer() {};
+/**
+ * @brief Just a class to manage the parameters and the file list.
+ */
+class FileParamHandler {
+   public:
+      FileParamHandler() {};
+      virtual ~FileParamHandler() {};
 
-    /**
-     * @brief Analyzes the input files.
-     * @return 0 if success. Non zero value in case of failure.
-     */
-    virtual int analyze() = 0;
+      /**
+       * @brief Add file(s).
+       */
+      virtual void add_files( std::vector<std::string>& ) = 0;
+      virtual void add_file( const std::string& ) = 0;
 
+      virtual void processParams( std::vector<std::string>& ) = 0;
 };
 
-#endif /* ANALYZER_H */
+#endif /* ICARUSHANDLER_H */
