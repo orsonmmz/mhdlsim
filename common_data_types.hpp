@@ -1,5 +1,5 @@
-#ifndef COMPILER_INTERFACE_H
-#define COMPILER_INTERFACE_H
+#ifndef COMMON_DATA_TYPES_H
+#define COMMON_DATA_TYPES_H
 
 /*
  * Copyright (c) 2016 CERN
@@ -19,23 +19,8 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "analyzer.h"
-#include "elaborator.h"
-#include "simulator.h"
+enum class CompilerStep { ANALYSIS = 1, ELABORATION = 2, SIMULATION = 3 };
 
-/**
- * @brief Class that represents a single compiler instance. Icarus and GHDL
- * have to provide such interface.
- */
-class Compiler : public virtual Analyzer, public virtual Elaborator, public virtual Simulator {
-   public:
-      Compiler() {};
-      virtual ~Compiler() {};
+inline std::ostream& operator<<(std::ostream& os, const CompilerStep& step);
 
-      enum Type { VERILOG, VHDL };
-
-};
-
-inline std::ostream& operator<<(std::ostream& os, const Compiler::Type& type);
-
-#endif /* COMPILER_INTERFACE_H */
+#endif /* COMMON_DATA_TYPES_H */

@@ -21,7 +21,9 @@
 #define MANAGER_H
 
 #include "compiler_interface.h"
+#include "common_data_types.hpp"
 #include <list>
+#include <string>
 
 class Simulator;
 class Net;
@@ -41,8 +43,8 @@ public:
      * @param sim is the instance to be added.
      * @param type is instance type.
      */
-    void add_instance(Compiler::Type type, Compiler* sim);
-    void add_instance(Compiler* sim, Compiler::Type type) {
+    void add_instance( Compiler::Type, Compiler* );
+    void add_instance( Compiler* sim, Compiler::Type type ) {
        add_instance( type, sim );
     };
 
@@ -59,14 +61,12 @@ private:
     ///> Instances of simulators to manage.
     std::map<Compiler*, Compiler::Type> instances_;
 
-    ///> Keep list of modules that have to be notified
-    ///> when a particular signal changes.
-    std::map<Net*, std::list<ModuleInstance*> > sensitivity_;
-
     ///> Currently active Compiler (i.e. executing code)
     Compiler* current_comp_;
 
     CompilerStep current_step_;
+
+    std::string not_found_;
 };
 
 #endif /* MANAGER_H */
