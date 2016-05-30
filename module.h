@@ -54,7 +54,6 @@ class Port {
       const std::string name_;
       const direction_t dir_;
       const unsigned width_;
-
 };
 
 inline std::ostream& operator<<(std::ostream& os, const Port::direction_t& el) {
@@ -88,9 +87,17 @@ class ModuleInterface {
          name_(name) {};
       virtual ~ModuleInterface() {};
 
+      void make_port( std::string& name, unsigned width = 0, Port::direction_t dir = Port::UNKNOWN ) {
+         assert( !name.empty() );
+         for( auto it = ports_.begin(); it != ports_.end(); ++it )
+            if( (*it)->name() == name )
+               assert(false);
+         ports_.push_back(new Port(name, width, dir));
+      }
       const std::string& name() const { return name_; }
       std::deque<Port*>::size_type size() const { return ports_.size(); }
       friend std::ostream& operator<<(std::ostream& os, const ModuleInterface&);
+      // TODO get_default_generic/param(const std::string& ?)const
 
       // TODO accessors for variables? constants? internal signals?
 
@@ -100,7 +107,6 @@ class ModuleInterface {
 
       ///> Interconnecting ports.
       std::deque<Port*> ports_;
-
 };
 
 inline std::ostream& operator<<(std::ostream& os, const ModuleInterface& el) {
@@ -115,27 +121,26 @@ inline std::ostream& operator<<(std::ostream& os, const ModuleInterface& el) {
 
 class ModuleSpec : public ModuleInterface {
    public:
-      ModuleSpec( const std::string& name ) :
-         ModuleInterface( name ) {};
+      ModuleSpec( const std::string& name1, const std::string& name2 ) :
+         ModuleInterface( name1 ), instance_name_(name2) {};
       virtual ~ModuleSpec() {};
 
-      void push_back(Port* val) { ports_.push_back(val); }
+      void add(Port* val) { assert(val); ports_.push_back(val); }
       std::deque<Port*>& ports() { return ports_; }
       Port* port(unsigned idx) { assert(idx < ports_.size()); return ports_[idx]; }
       // TODO get_generic/param
       // TODO set_generic/param
-      // TODO get_default_generic/param(const std::string& ?)const
-
+      const std::string& instance_name() const { return instance_name_; }
+      ///> Name of the instance.
+      const std::string instance_name_;
 };
 
 class ModuleInstance {
    public:
-      ModuleInstance(const std::string& name, ModuleSpec* iface) :
-         name_(name),
+      ModuleInstance(ModuleSpec* iface) :
          iface_(iface) {};
       virtual ~ModuleInstance() {};
 
-      const std::string& name() const { return name_; }
       ModuleSpec* iface() const {
          assert(iface_);
          return iface_;
@@ -158,9 +163,6 @@ class ModuleInstance {
       // TODO get_generic/param
 
    private:
-      ///> Name of the instance.
-      const std::string name_;
-
       ///> Associated component/module interface.
       ModuleSpec* iface_;
 
@@ -174,8 +176,7 @@ class ModuleInstance {
 };
 
 inline std::ostream& operator<<(std::ostream& os, const ModuleInstance& el) {
-   os << "Instance name " << el.name_ << ". "
-      << *el.iface_;
+   os << "Instance with values: " << std::endl << *el.iface_;
    return os;
 }
 

@@ -1,3 +1,6 @@
+#ifndef NET_H
+#define NET_H
+
 /*
  * Copyright (c) 2016 CERN
  * @author Maciej Suminski <maciej.suminski@cern.ch>
@@ -17,16 +20,21 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NET_H
-#define NET_H
+#include <vector>
+#include <cassert>
 
 /**
  * @brief Class that represents a connection between modules.
  */
 class Net {
 public:
-    Net(const std::string& name, int width = 1);
-    virtual ~Net();
+    Net( const std::string& name,
+         const std::string& instance_name,
+         unsigned width = 1 )
+       : val_(width),
+         name_(name),
+         instance_name_(instance_name) {};
+    virtual ~Net() {};
 
     ///> Possible net values
     enum value_t { V0, V1, VX, VZ, VH, VL };
@@ -35,8 +43,9 @@ public:
     // TODO should it be possible only for the Manager?
     virtual void set_value(const value_vec_t& v) { assert(v.size() == width()); val_ = v; }
     const std::string& name() const { return name_; }
+    const std::string& instance_name() const { return instance_name_; }
     virtual const value_vec_t& value() const { return val_; }
-    int width() { return val_.size(); }
+    unsigned width() const { return val_.size(); }
 
     // TODO do we need other net types? in fact everything in the end is
     // just a bunch of bits, so probably could be represented using this class as well
@@ -44,6 +53,7 @@ public:
 protected:
     value_vec_t val_;
     const std::string name_;
+    const std::string instance_name_;
 };
 
 /**
